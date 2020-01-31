@@ -1,0 +1,3908 @@
+=~=~=~=~=~=~=~=~=~=~=~= PuTTY log 2020.01.31 11:59:57 =~=~=~=~=~=~=~=~=~=~=~=
+show run
+Building configuration...
+
+Current configuration : 79541 bytes
+!
+! Last configuration change at 09:52:35 CET Wed Jan 29 2020 by shedal
+! NVRAM config last updated at 09:52:38 CET Wed Jan 29 2020 by shedal
+!
+version 12.2
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec localtime
+service timestamps log datetime msec localtime
+service password-encryption
+service counters max age 5
+!
+hostname dora-cat65-vss
+!
+boot-start-marker
+boot system flash sup-bootdisk:s72033-advipservicesk9_wan-mz.122-33.SXJ6.bin
+boot system flash sup-bootdisk:
+boot-end-marker
+!
+vrf definition rad-mgm
+ rd 64730:415
+ !
+ address-family ipv4
+ route-target export 64730:415
+ route-target import 64730:415
+ exit-address-family
+!
+security passwords min-length 1
+logging buffered 100000
+logging console informational
+logging monitor informational
+enable secret 5 $1$SAcj$iy5YJWdyDbStRpzhtON2v/
+!
+username admin password 7 121B0405175F3956
+username sam privilege 15 secret 5 $1$I9zm$kOYzl4QW6iZT4hoQTLRvr.
+aaa new-model
+!
+!
+aaa group server radius NPS
+ server 10.206.106.42 auth-port 1812 acct-port 1813
+ ip vrf forwarding mgmt-dc-network
+ ip radius source-interface Vlan3751
+!
+aaa group server tacacs+ ISE
+ server-private 10.0.211.190 key 7 0509071D24187B5B
+ server-private 10.206.201.20 key 7 104C080B00432759
+ ip tacacs source-interface Vlan211
+!
+aaa authentication login default group ISE local
+aaa authentication login line none
+aaa authentication login CONSOLE none
+aaa authentication enable default group ISE enable
+aaa authorization exec default group ISE local if-authenticated 
+aaa authorization commands 7 default group ISE 
+aaa authorization commands 15 default group ISE local if-authenticated 
+aaa accounting exec default start-stop group ISE
+aaa accounting commands 7 default start-stop group ISE
+aaa accounting commands 15 default start-stop group ISE
+!
+!
+!
+aaa session-id common
+clock timezone CET 1
+clock summer-time CET recurring last Sun Mar 2:00 last Sun Oct 3:00
+logging event link-status default
+!
+!
+!
+ip ftp username ftp_user
+ip ftp password 7 06000D20151B584E01134A0A0F5D78282770636174
+ip vrf DCN
+ rd 64730:533
+!
+ip vrf adgang
+ rd 64730:314
+ route-target export 64730:314
+ route-target import 64730:314
+!
+ip vrf be-mikrotik
+ rd 64730:176
+ route-target export 64730:176
+ route-target import 64730:176
+!
+ip vrf conkom
+ rd 64730:190
+!
+ip vrf ebicos-remote
+ rd 64730:324
+!
+ip vrf ertms
+ rd 64730:242
+ route-target export 64730:242
+ route-target import 64730:242
+!
+ip vrf fido
+ rd 64730:306
+!
+ip vrf frequentis
+ rd 64730:221
+ route-target export 64730:221
+ route-target import 64730:221
+!
+ip vrf gprs-gb
+ rd 64730:1663
+ route-target export 64730:1663
+ route-target import 64730:1663
+!
+ip vrf gprs-gi
+ rd 64730:1659
+ route-target export 64730:1659
+ route-target import 64730:1659
+!
+ip vrf gprs-gn
+ rd 64730:1665
+ route-target export 64730:1665
+ route-target import 64730:1665
+!
+ip vrf gsmr-data
+ rd 64730:501
+ route-target export 64730:501
+ route-target import 64730:501
+!
+ip vrf gsmr-oam
+ rd 64730:500
+ route-target export 64730:500
+ route-target import 64730:500
+!
+ip vrf gsmr-radio
+ rd 64730:202
+ route-target export 64730:202
+ route-target import 64730:202
+!
+ip vrf gsmr-voice
+ rd 64730:502
+ route-target export 64730:502
+ route-target import 64730:502
+!
+ip vrf kari
+ rd 64730:219
+!
+ip vrf mgmt-dc-network
+ rd 64730:3751
+!
+ip vrf ngn-internett
+ rd 64370:8
+ route-target export 64730:8
+ route-target import 64730:8
+!
+ip vrf pia
+ rd 64730:214
+ route-target export 64730:214
+ route-target import 64730:214
+!
+ip vrf sigtran
+ rd 64730:540
+ route-target export 64730:540
+ route-target import 64730:540
+!
+ip vrf sporvekselvarme
+ rd 64730:220
+!
+ip vrf sro
+ rd 64730:234
+!
+ip vrf tsov
+ rd 64730:308
+!
+ip multicast-routing vrf gsmr-oam 
+ip ssh version 2
+ip scp server enable
+no ip domain-lookup
+ip domain-name net.jbv.local
+vtp mode transparent
+!
+switch virtual domain 101
+ switch mode virtual
+!
+mls netflow interface
+mls cef error action reset
+!
+!
+!
+!
+!
+!
+!
+!
+!
+archive
+ log config
+  logging enable
+  logging size 500
+ path ftp://10.206.115.55/$h
+ write-memory
+!
+spanning-tree mode rapid-pvst
+spanning-tree extend system-id
+spanning-tree vlan 1-66,68-279,282-535,537-899,901-905,907-3210 priority 8192
+spanning-tree vlan 3212-3589,3592-4094 priority 8192
+spanning-tree vlan 67,280-281,536,900,906,3211,3590-3591 priority 40960
+diagnostic bootup level minimal
+access-list 199 permit ip 10.255.0.0 0.0.255.255 any
+access-list 199 permit ip 10.206.0.0 0.1.255.255 any
+access-list 199 permit ip 10.100.106.0 0.0.0.255 any
+access-list 199 permit ip 10.100.108.0 0.0.0.255 any
+access-list 199 permit ip 10.208.112.0 0.0.0.255 any
+!
+redundancy
+ main-cpu
+  auto-sync running-config
+ mode sso
+!
+ip access-list standard VTY_ACCESS
+ permit 10.206.207.2
+ permit 172.18.7.202
+ permit 10.250.108.230
+ permit 172.28.7.203
+ permit 10.250.106.230
+ permit 10.255.3.59
+ permit 10.208.112.100
+ permit 10.100.106.230
+ permit 10.100.108.230
+ permit 10.255.255.64 0.0.0.63
+ permit 10.255.241.0 0.0.0.255
+ permit 10.206.230.0 0.0.0.255
+ permit 10.0.211.0 0.0.0.255
+ permit 10.1.0.0 0.0.0.255
+ permit 10.248.0.0 0.0.1.255
+ permit 10.255.242.0 0.0.0.255
+ deny   any
+!
+ip access-list extended GTP-C
+ permit udp any any eq 2123
+ permit udp any eq 2123 any
+ip access-list extended SIGTRAN
+ permit 132 any any
+!
+!
+vlan access-map SIGTRAN_CAPTURE 10
+ match ip address SIGTRAN
+ action forward capture
+vlan access-map SIGTRAN_CAPTURE 20
+ match ip address GTP-C
+ action forward capture
+!
+vlan filter SIGTRAN_CAPTURE vlan-list  4089
+vlan internal allocation policy ascending
+vlan access-log ratelimit 2000
+!
+vlan 51
+ name RAD_SC
+!
+vlan 53
+ name RAD_Ofotbanen
+!
+vlan 62
+ name RAD_trd_OPM
+!
+vlan 100
+ name SAM_NE-interface
+!
+vlan 111
+ name SAM-DB-sync
+!
+vlan 199
+ name Netviewer
+!
+vlan 200
+ name core
+!
+vlan 206
+ name SMSC-mgmt
+!
+vlan 207
+ name SMSc-traf
+!
+vlan 211
+ name KV-Nett_mgmt
+!
+vlan 223
+ name QATS
+!
+vlan 240
+ name srvadm
+!
+vlan 241
+ name cliadm
+!
+vlan 242
+ name li-drift-klient
+!
+vlan 250
+ name KlientNett
+!
+vlan 252
+ name linknett_FW
+!
+vlan 253
+ name ServerNett
+!
+vlan 256
+ name internetaksess
+!
+vlan 258
+ name dmz_video
+!
+vlan 260
+ name IN
+!
+vlan 265
+ name RC
+!
+vlan 270
+ name mgmt_dcn
+!
+vlan 272
+ name ILO
+!
+vlan 273
+ name fwmgmt
+!
+vlan 274
+ name ILO-marienborg
+!
+vlan 275
+ name VAAS-VMware-mgmt
+!
+vlan 276
+ name NetACT
+!
+vlan 280
+ name GPRS_OAM
+!
+vlan 291
+ name gprs_fleet
+!
+vlan 292
+ name hjulskade
+!
+vlan 293
+ name sporvarme
+!
+vlan 306
+ name trh.ad
+!
+vlan 314
+ name Adgangskontroll
+!
+vlan 332
+ name oti-utv
+!
+vlan 334
+ name OTI-stage
+!
+vlan 363
+ name link_testnett
+!
+vlan 364
+ name test
+!
+vlan 500
+ name IN-OAM
+!
+vlan 501
+ name IN-data_p+r
+!
+vlan 502
+ name IN-backup
+!
+vlan 503
+ name IN-payload
+!
+vlan 504
+ name IN-data_online
+!
+vlan 505
+ name IN-data_offline
+!
+vlan 506
+ name IN-farm_ic
+!
+vlan 507
+ name IN-db_ic
+!
+vlan 510
+ name "HLR Application"
+!
+vlan 520
+ name HLR-OAM
+!
+vlan 521
+ name Freq-OAM
+!
+vlan 522
+ name Freq-APP
+!
+vlan 525
+ name Provisioning-Mentura
+!
+vlan 526
+ name Billing-CMD
+!
+vlan 527
+ name CMD-billing-OAM
+!
+vlan 528
+ name CMD-billing-data
+!
+vlan 530
+ name One-NDS
+!
+vlan 531
+ name TNMS-OAM
+!
+vlan 533
+ name Netviewer_DCN
+!
+vlan 540
+ name NT-HLR_SIGTRAN1
+!
+vlan 542
+ name IN-SIGTRAN1
+!
+vlan 550
+ name NT-HLR_SIGTRAN2
+!
+vlan 552
+ name IN-SIGTRAN2
+!
+vlan 561
+ name IN-sigtran-int1
+!
+vlan 570
+ name NT-HLR_DiameterB
+!
+vlan 571
+ name IN-sigtran-int2
+!
+vlan 580
+ name Expandium-QATS_OaM-ILO
+!
+vlan 581
+ name Expandium-DATA
+!
+vlan 600
+ name "OSS DATA"
+!
+vlan 610
+ name "OSS MGMT"
+!
+vlan 620
+ name VPLEX-witness-TrdS
+!
+vlan 640
+ name gsmr-traffic
+!
+vlan 1020
+ name ds.mgmt.linknett
+!
+vlan 1108
+ name lnk.internett-ngn
+!
+vlan 1176
+ name ds.ngn.be-mikrotik
+!
+vlan 1190
+ name linknett.conkom.ngn
+!
+vlan 1202
+ name linknett.gsmr-radio.ngn
+!
+vlan 1203
+ name linknett.gprs-gb.ngn
+!
+vlan 1211
+ name linknett.ngn.dora
+!
+vlan 1212
+ name nodlys
+!
+vlan 1214
+ name linknett.pia.ngn
+!
+vlan 1219
+ name linknett.ngn-ds.kari
+!
+vlan 1220
+ name linknett.svv.ngn
+!
+vlan 1221
+ name linknett.frq.ngn.dora
+!
+vlan 1234
+ name linknett_ngn-sro
+!
+vlan 1242
+ name linknett.ngn.ertms.dora
+!
+vlan 1306
+ name linknett.fido.ngn
+!
+vlan 1308
+ name linknet.tsov.ipmpls
+!
+vlan 1324
+ name ds.ebicos-remote
+!
+vlan 1415
+ name linknett.rad-mgm.ngn
+!
+vlan 1500
+ name linknett.ngn.gsmr-oam
+!
+vlan 1501
+ name linknett.ngn.gsmr-data
+!
+vlan 1540
+ name uplink_sigtran_NGN
+!
+vlan 2001
+ name linknet.fw.indre
+!
+vlan 2002
+ name linknet.fw.ytre
+!
+vlan 2108
+ name lnk.internett-ngn.fw
+!
+vlan 2176
+ name link.be-mikrotik.fw
+!
+vlan 2202
+ name linknett.gsmr-radio.fw
+!
+vlan 2211
+ name linknett.management.fw
+!
+vlan 2214
+ name PIA-linknett
+!
+vlan 2219
+ name ds.kari.fw
+!
+vlan 2220
+ name linknett.sporvekselvarme.fw
+!
+vlan 2221
+ name FRQ_NGN
+!
+vlan 2234
+ name link.sro.fw
+!
+vlan 2242
+ name linknett.fw.ertms.dor
+!
+vlan 2245
+ name link.thales-fw1.fw
+!
+vlan 2246
+ name link.tales-mmop.fw
+!
+vlan 2306
+ name linknett.fido.fw
+!
+vlan 2308
+ name linknet.tsov.fw
+!
+vlan 2324
+ name fw.ebicos.remote
+!
+vlan 2415
+ name linknett.rad-mgm.fw
+!
+vlan 2500
+ name linknett.gsmr-oam.fw
+!
+vlan 2501
+ name linknett.gsmr-data.fw
+!
+vlan 2620
+ name linknett.fw.vprn-vplex
+!
+vlan 2655
+ name linknett.gprs-gn-ext.yfw
+!
+vlan 2659
+ name linknett.gprs-gi.fw
+!
+vlan 2700
+ name linknett.fw.opm-it-int
+!
+vlan 3001
+ name BMS-Dora
+!
+vlan 3176
+ name ds.be-mikrotik
+!
+vlan 3190
+ name linknett.conkom.lan
+!
+vlan 3202
+ name ds.gsmr-radio
+!
+vlan 3220
+ name ds.sporvekselvarme.marienborg
+!
+vlan 3221
+ name Frequentis-VoIP
+!
+vlan 3314
+ name linknett.marbg-dora.adgang
+!
+vlan 3330
+ name Fido-CI
+!
+vlan 3332
+ name Fido-QA
+!
+vlan 3333
+ name Fido-Prod
+!
+vlan 3335
+ name IAM-Test
+!
+vlan 3337
+ name Fido-Edu
+!
+vlan 3341
+ name ComTest
+!
+vlan 3342
+ name BE-FJEL
+!
+vlan 3343
+ name HPSM
+!
+vlan 3344
+ name HPSM-Test
+!
+vlan 3345
+ name XENAPP_v7
+!
+vlan 3347
+ name TELEMATOR
+!
+vlan 3348
+ name SVV_Gen64
+!
+vlan 3349
+ name TSOV-Vosta
+!
+vlan 3350
+ name DMZ-27
+  private-vlan primary
+  private-vlan association 3800-3803
+!
+vlan 3351
+ name KARI_STG
+!
+vlan 3352
+ name KARI_PROD
+!
+vlan 3353
+ name KARI_TEST
+!
+vlan 3355
+ name ERTMS
+!
+vlan 3356
+ name FLEET
+!
+vlan 3398
+ name DMZ_INT_10-87
+!
+vlan 3399
+ name WLAN-DORA
+!
+vlan 3401
+ name srx-sat-test-2
+!
+vlan 3500
+ name linknett.gsmr-oam.lan
+!
+vlan 3501
+ name linknett.gsmr-data.lan
+!
+vlan 3511
+ name SAT-OTA_OAM
+!
+vlan 3512
+ name SAT-OTA_Data
+!
+vlan 3514
+ name SMSC_DATA
+!
+vlan 3533
+ name Netviewer_OAM
+!
+vlan 3534
+ name Netviewer_Sync
+!
+vlan 3540
+ name linknett.sigtran.lan
+!
+vlan 3541
+ name SMSC_sigtran#1
+!
+vlan 3551
+ name SMSC_sigtran#2
+!
+vlan 3580
+ name EXP-v3-OAM
+!
+vlan 3581
+ name EXP-v3-DATA
+!
+vlan 3590
+ name WingCon-VR_OAM
+!
+vlan 3591
+ name WingCon-VR_Data
+!
+vlan 3600
+ name netact8_DATA
+!
+vlan 3601
+ name netact8_Vmotion
+!
+vlan 3602
+ name NetAct_Cloned-VMs
+!
+vlan 3603
+ name NetAct_Datasync
+!
+vlan 3620
+ name vplex_A
+ mtu 9216
+!
+vlan 3621
+ name vplex_B
+ mtu 9216
+!
+vlan 3640
+ name linknett.gsmr.voice
+!
+vlan 3655
+ name linknett.gprs-gn.lan
+!
+vlan 3656
+ name GPRS-GN-DNS
+!
+vlan 3657
+ name GPRS-GN-GNS-OaM
+!
+vlan 3659
+ name linknett.gprs-gi.lan
+!
+vlan 3663
+ name linknett.gprs-gb.lan
+!
+vlan 3671
+ name AIMOS-OAM
+!
+vlan 3700
+ name Misc-Linux
+!
+vlan 3701
+ name Misc-Windows
+!
+vlan 3702
+ name kafka
+!
+vlan 3703
+ name Backup
+!
+vlan 3704
+ name OSS
+!
+vlan 3705
+ name nsx-sat-test-2
+!
+vlan 3706
+ name INT-PX-SERVICES
+!
+vlan 3707
+ name LOCAL-VIDEO-MAR
+!
+vlan 3708
+ name li-drift-common
+!
+vlan 3709
+ name bomgar-pam
+!
+vlan 3710
+ name ADK
+!
+vlan 3711
+ name OSS_TEST
+!
+vlan 3712
+ name ADK-EKST
+!
+vlan 3713
+ name vitalqip
+!
+vlan 3714
+ name splunk
+!
+vlan 3715
+ name datadomain
+!
+vlan 3716
+ name graylog
+!
+vlan 3717
+ name storage-management
+!
+vlan 3718
+ name vmware-witness
+!
+vlan 3750
+ name MGMT-iLO
+!
+vlan 3751
+ name MGMT-DC-Network
+!
+vlan 3752
+ name MGMT-Storage
+!
+vlan 3753
+ name Wmware-MGNT-Virtual
+!
+vlan 3754
+ name Wmware-MGNT-Physical
+!
+vlan 3755
+ name MGMT-VMware
+!
+vlan 3756
+ name Proxy-Services
+!
+vlan 3757
+ name VMware-FT
+!
+vlan 3758
+ name VMware-vSAN
+!
+vlan 3759
+ name MGMT-VMware-vMotion
+!
+vlan 3760
+ name UAG-MGNT-VDI
+!
+vlan 3761
+ name UAG-Heartbeat-VDI
+!
+vlan 3762
+ name HA-Heartbeat
+!
+vlan 3763
+ name DMZ_UAG_VDI
+!
+vlan 3780
+ name VDI-Clients
+!
+vlan 3781
+ name VDI-Clients-UAC
+!
+vlan 3800
+ name PV-DMZ-Isolated
+  private-vlan isolated
+!
+vlan 3801
+ name PV-DMZ-DNS
+  private-vlan community
+!
+vlan 3802
+ name PV-DMZ-IAM
+  private-vlan community
+!
+vlan 3803
+ name PV-DMZ-WEB-LB
+  private-vlan community
+!
+vlan 4089
+ remote-span
+!
+! 
+!
+!
+!
+interface Loopback200
+ description NTP-adresse for GSM-R
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.223.255 255.255.255.255
+!
+interface Port-channel1
+ description *** uplinkt til marienborg-cat65-vss ***
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 256,400,3620,3621
+ switchport mode trunk
+ mtu 9216
+!
+interface Port-channel5
+ description dora-fw_indre
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-1099,1212,2000-4094
+ switchport mode trunk
+!
+interface Port-channel6
+ description dora-fw_ytre
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+!
+interface Port-channel10
+ description Dora-sr-1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 100,211,541,1100-1699,2620,2655,2700
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface Port-channel11
+ description ** NetAct SW1 **
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 205-208,221,222,275,525-528,533,600-610,3511
+ switchport trunk allowed vlan add 3512,3533,3534
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface Port-channel12
+ description ** NetAct SW2 **
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 205-208,221,222,275,525-528,533,600-610,3511
+ switchport trunk allowed vlan add 3512,3533,3534
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface Port-channel20
+ description ** marienborg-cat651 **
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-99,101-110,112-210,212-313,315-499,525-528
+ switchport trunk allowed vlan add 600-610,900-1099,1212,2000-4094
+ switchport mode trunk
+ mtu 9216
+!
+interface Port-channel21
+ description Frequentis-SW1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 521-523,3221
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface Port-channel31
+ description IN-SW1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 500-509,542,552,561,571
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface Port-channel32
+ description IN-SW2
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 500-509,542,552,561,571
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface Port-channel33
+ description WinCon-Uplink-SW1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 3590,3591
+ switchport mode trunk
+!
+interface Port-channel34
+ description WingCon-Uplink-SW2
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 3590,3591
+ switchport mode trunk
+!
+interface Port-channel64
+ description ***linkagg to dora-enc-01***
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+!
+interface Port-channel71
+ description Expandium-QATS-Dora-SW1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 200,580,581,4089
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface Port-channel101
+ no switchport
+ no ip address
+ switch virtual link 1
+ mls qos trust cos
+ no mls qos channel-consistency
+!
+interface Port-channel102
+ no switchport
+ no ip address
+ switch virtual link 2
+ mls qos trust cos
+ no mls qos channel-consistency
+!
+interface Port-channel120
+ description ** dora-sr-2 **
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 100,1700-1999
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface TenGigabitEthernet1/1/1
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet1/1/2
+ description dora-sr-1_3/2/1
+ switchport
+ switchport trunk allowed vlan 100,211,541,1100-1699,2620,2655,2700
+ switchport mode trunk
+ switchport nonegotiate
+ channel-protocol lacp
+ channel-group 10 mode active
+!
+interface TenGigabitEthernet1/1/3
+ description mgw-userplane-1-ppam-b-slot_7
+ switchport
+ switchport trunk allowed vlan 640
+ switchport mode trunk
+ spanning-tree bpduguard enable
+!
+interface TenGigabitEthernet1/1/4
+ description vaas vc slot 1 X2
+ switchport
+ switchport trunk allowed vlan 205-208,221,222,275,525-528,3511-3514,3541,3551
+ switchport trunk allowed vlan add 3600-3603
+ switchport mode trunk
+ switchport nonegotiate
+ mtu 9216
+ spanning-tree portfast edge trunk
+!
+interface TenGigabitEthernet1/1/5
+ description dora-sr-2_3/2/1
+ switchport
+ switchport trunk allowed vlan 100,1700-1999
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 120 mode active
+!
+interface TenGigabitEthernet1/1/6
+ description dora-fw-indre-01 Ge1/0
+ switchport
+ switchport trunk allowed vlan 1-1099,1212,2000-4094
+ switchport mode trunk
+ channel-group 5 mode active
+!
+interface TenGigabitEthernet1/1/7
+ description dora-esx-vdi-04[IF-1]
+ switchport
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree portfast edge trunk
+!
+interface TenGigabitEthernet1/1/8
+ description dora-esx-vdi-05[IF-1]
+ switchport
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree portfast edge trunk
+!
+interface TenGigabitEthernet1/1/9
+ description dora-fw-indre-01 Ge1/0
+ switchport
+ switchport trunk allowed vlan 1-1099,1212,2000-4094
+ switchport mode trunk
+ channel-group 5 mode active
+!
+interface TenGigabitEthernet1/1/10
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet1/1/11
+ description *** vplex 2A1 ***
+ switchport
+ switchport access vlan 3621
+ switchport mode access
+ mtu 9216
+ spanning-tree portfast edge
+!
+interface TenGigabitEthernet1/1/12
+ description *** vplex 2B1 ***
+ switchport
+ switchport access vlan 3621
+ switchport mode access
+ mtu 9216
+ spanning-tree portfast edge
+!
+interface TenGigabitEthernet1/1/13
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet1/1/14
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet1/1/15
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet1/1/16
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/1
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/2
+ description mss-mgw-oam-ce0-rel4-gig0/1/0
+ no switchport
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.193.1 255.255.255.252
+ ip ospf network point-to-point
+!
+interface GigabitEthernet1/2/3
+ description mss-mgw-sigtran-ce0-rel4-gig0/1/1
+ no switchport
+ ip vrf forwarding sigtran
+ ip address 10.200.193.13 255.255.255.252
+ ip ospf network point-to-point
+!
+interface GigabitEthernet1/2/4
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/5
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/6
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/7
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/8
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/9
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/10
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/11
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/12
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/13
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/14
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/15
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/16
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/17
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/18
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/19
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/20
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/21
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/22
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/23
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/2/24
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/1
+ description Adgang-US-tavlerom
+ switchport
+ switchport access vlan 314
+ switchport mode access
+ switchport nonegotiate
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/2
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/3
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/4
+ description TNMS-Core_OAM
+ switchport
+ switchport access vlan 531
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/5
+ description TNMS-Core_DCN
+ switchport
+ switchport access vlan 199
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/6
+ description * Klientnett DORA *
+ switchport
+ switchport access vlan 241
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/7
+ description * BMS Dora *
+ switchport
+ switchport access vlan 3001
+ switchport mode access
+ speed 10
+ duplex half
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/8
+ description FlexiBSC-OaM-1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan none
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet1/3/9
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/10
+ description BMS_Client
+ switchport
+ switchport access vlan 3001
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/11
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/12
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/13
+ description ** NetAct SW1 **
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 205-208,221,222,275,525-528,533,600-610,3511
+ switchport trunk allowed vlan add 3512,3533,3534
+ switchport mode trunk
+ switchport nonegotiate
+ speed 1000
+ duplex full
+ channel-group 11 mode on
+!
+interface GigabitEthernet1/3/14
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/15
+ description SAM_NE-interface
+ switchport
+ switchport access vlan 100
+ switchport mode access
+ switchport port-security
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/16
+ description SAM-APP_DB-interface
+ switchport
+ switchport access vlan 111
+ switchport mode access
+ switchport port-security
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/17
+ description SAM-DB_DB-interface
+ switchport
+ switchport access vlan 111
+ switchport mode access
+ switchport port-security
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/18
+ description SAM-OAM
+ switchport
+ switchport access vlan 211
+ switchport mode access
+ switchport port-security
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/19
+ description SAM-APP-ILO
+ switchport
+ switchport access vlan 211
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/20
+ description SAM-DB-ILO
+ switchport
+ switchport access vlan 211
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/21
+ description WincCon-Po33
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 3590,3591
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 33 mode passive
+!
+interface GigabitEthernet1/3/22
+ description Frequentis-SW1_Po21
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 521-523,3221
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 21 mode active
+!
+interface GigabitEthernet1/3/23
+ description IN-SW1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 500-509,542,552,561,571
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+ channel-group 31 mode on
+!
+interface GigabitEthernet1/3/24
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/25
+ description IN-SW2
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 500-509,542,552,561,571
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+ channel-group 32 mode on
+!
+interface GigabitEthernet1/3/26
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/27
+ no switchport
+ no ip address
+ shutdown
+ speed 100
+!
+interface GigabitEthernet1/3/28
+ no switchport
+ no ip address
+!
+interface GigabitEthernet1/3/29
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/30
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/31
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/32
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/33
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/34
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/35
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/36
+ description Expandium-QATS-Dora-SW1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 200,580,581,4089
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 71 mode desirable
+!
+interface GigabitEthernet1/3/37
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/38
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/39
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/40
+ description SGSN_GGSN_DORA_R1_UPLINK
+ no switchport
+ no ip address
+!
+interface GigabitEthernet1/3/40.1547
+ description ***gprs Gr from ATCA***
+ encapsulation dot1Q 1547
+ ip vrf forwarding sigtran
+ ip address 10.200.192.57 255.255.255.248
+ ip ospf network point-to-point
+!
+interface GigabitEthernet1/3/40.1651
+ encapsulation dot1Q 1651
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.192.25 255.255.255.248
+ ip ospf network point-to-point
+!
+interface GigabitEthernet1/3/40.1655
+ encapsulation dot1Q 1655
+ ip vrf forwarding gprs-gn
+ ip address 10.200.192.33 255.255.255.248
+ ip ospf network point-to-point
+!
+interface GigabitEthernet1/3/40.1659
+ encapsulation dot1Q 1659
+ ip vrf forwarding gprs-gi
+ ip address 10.200.192.41 255.255.255.248
+ ip ospf network point-to-point
+!
+interface GigabitEthernet1/3/40.1663
+ encapsulation dot1Q 1663
+ ip vrf forwarding gprs-gb
+ ip address 10.200.192.49 255.255.255.248
+ ip ospf network point-to-point
+!
+interface GigabitEthernet1/3/41
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/42
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/43
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/44
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/45
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/46
+ description Symmetricom-TP1000
+ switchport
+ switchport access vlan 211
+ switchport mode access
+ switchport port-security
+ speed 10
+ duplex full
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/47
+ description dora-fw-ytre-01 ge-0/2
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+ channel-group 6 mode active
+!
+interface GigabitEthernet1/3/48
+ description dora-fw-ytre-01 ge-0/2
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+ channel-group 6 mode active
+!
+interface GigabitEthernet1/4/1
+ description Expandium SIGTRAN monitoring
+ switchport
+ switchport capture
+ switchport capture allowed vlan 4089
+!
+interface GigabitEthernet1/4/2
+ description dora-esx-vdi-05-ILO
+ switchport
+ switchport access vlan 3750
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/4/3
+ no switchport
+ no ip address
+!
+interface GigabitEthernet1/4/4
+ description dora-esx-vdi-04-ILO
+ switchport
+ switchport access vlan 3750
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/4/5
+ description * iRMC tnms Dora *
+ switchport
+ switchport access vlan 272
+!
+interface GigabitEthernet1/4/6
+ description Dora-dd-1-oam
+ switchport
+ switchport access vlan 272
+!
+interface GigabitEthernet1/4/7
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/8
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/9
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/10
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/11
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/12
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/13
+ description ** NetAct SW2 **
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 205-208,221,222,275,525-528,533,600-610,3511
+ switchport trunk allowed vlan add 3512,3533,3534
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 12 mode on
+!
+interface GigabitEthernet1/4/14
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/15
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/16
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/17
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/18
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/19
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/20
+ description WingCon-Po34
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 3590,3591
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 34 mode passive
+!
+interface GigabitEthernet1/4/21
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/22
+ description Frequentis-SW1_Po21
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 521-523,3221
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 21 mode active
+!
+interface GigabitEthernet1/4/23
+ description IN-SW1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 500-509,542,552,561,571
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+ channel-group 31 mode on
+!
+interface GigabitEthernet1/4/24
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/25
+ description IN-SW2
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 500-509,542,552,561,571
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+ channel-group 32 mode on
+!
+interface GigabitEthernet1/4/26
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/27
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/28
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/29
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/30
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/31
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/32
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/33
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/34
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/35
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/36
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/37
+ description dora-enc01-oa01
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 3750,3752
+ switchport mode trunk
+ spanning-tree portfast edge
+!
+interface GigabitEthernet1/4/38
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/39
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/40
+ switchport
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet1/4/41
+ switchport
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet1/4/42
+ switchport
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet1/4/43
+ switchport
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet1/4/44
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/45
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/46
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/47
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/4/48
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/5/1
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/5/2
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/5/3
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet1/5/4
+ description marbg-cat65vss-Te1/5/4_Po20
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-99,101-110,112-210,212-313,315-499,525-528
+ switchport trunk allowed vlan add 600-610,900-1099,1212,2000-4094
+ switchport mode trunk
+ mtu 9216
+ shutdown
+ channel-group 20 mode on
+!
+interface TenGigabitEthernet1/5/5
+ description VSS-Link1
+ no switchport
+ no ip address
+ shutdown
+ mls qos trust cos
+ channel-group 101 mode on
+!
+interface GigabitEthernet1/6/1
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/6/2
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/6/3
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet1/6/4
+ description * marienborg cat-651-Te1/5-Po20 *
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-99,101-110,112-210,212-313,315-499,525-528
+ switchport trunk allowed vlan add 600-610,900-1099,1212,2000-4094
+ switchport mode trunk
+ mtu 9216
+ channel-group 20 mode on
+!
+interface TenGigabitEthernet1/6/5
+ description VSS-Link2
+ no switchport
+ no ip address
+ mls qos trust cos
+ channel-group 101 mode on
+!
+interface TenGigabitEthernet1/7/1
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet1/7/2
+ description mgw-userplane-1-ppam-b-slot_7
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 640
+ switchport mode trunk
+ spanning-tree bpduguard enable
+!
+interface TenGigabitEthernet1/7/3
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet1/7/4
+ description dora-vsx01-eth7
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-250,252-4094
+ switchport mode trunk
+ shutdown
+!
+interface TenGigabitEthernet1/7/5
+ description dora-vsx01-eth6
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-250,252-4094
+ switchport mode trunk
+ shutdown
+!
+interface TenGigabitEthernet1/7/6
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet1/7/7
+ no switchport
+ no ip address
+!
+interface TenGigabitEthernet1/7/8
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet2/1/1
+ description dora-vc02
+ switchport
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree portfast edge trunk
+!
+interface TenGigabitEthernet2/1/2
+ description mgw-userplane-2-ppam-b-slot_10
+ switchport
+ switchport trunk allowed vlan 640
+ switchport mode trunk
+ spanning-tree bpduguard enable
+!
+interface TenGigabitEthernet2/1/3
+ description dora-sr-2_5/1/1
+ switchport
+ switchport trunk allowed vlan 100,1700-1999
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 120 mode active
+!
+interface TenGigabitEthernet2/1/4
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet2/1/5
+ description dora-sr-1_5/1/1
+ switchport
+ switchport trunk allowed vlan 100,211,541,1100-1699,2620,2655,2700
+ switchport mode trunk
+ switchport nonegotiate
+ channel-protocol lacp
+ channel-group 10 mode active
+!
+interface TenGigabitEthernet2/1/6
+ description *** vplex 2A0 ***
+ switchport
+ switchport access vlan 3620
+ switchport mode access
+ mtu 9216
+ spanning-tree portfast edge
+!
+interface TenGigabitEthernet2/1/7
+ description *** vplex 2B0 ***
+ switchport
+ switchport access vlan 3620
+ switchport mode access
+ mtu 9216
+ spanning-tree portfast edge
+!
+interface TenGigabitEthernet2/1/8
+ description vaas vc slot 2 X2
+ switchport
+ switchport trunk allowed vlan 205-208,221,222,275,525-528,3511-3514,3541,3551
+ switchport trunk allowed vlan add 3600-3603
+ switchport mode trunk
+ switchport nonegotiate
+ mtu 9216
+ spanning-tree portfast edge trunk
+!
+interface TenGigabitEthernet2/1/9
+ description dora-esx-vdi-04[IF-2]
+ switchport
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree portfast edge trunk
+!
+interface TenGigabitEthernet2/1/10
+ description dora-esx-vdi-05[IF-1]
+ switchport
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree portfast edge trunk
+!
+interface TenGigabitEthernet2/1/11
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet2/1/12
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet2/1/13
+ description dora-enc-01[sw1-p6]
+ switchport
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+ channel-group 64 mode active
+!
+interface TenGigabitEthernet2/1/14
+ description dora-enc-01[sw2-p6]
+ switchport
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+ channel-group 64 mode active
+!
+interface TenGigabitEthernet2/1/15
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet2/1/16
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/1
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/2
+ description mss-mgw-oam-ce1-rel4-gig0/1/0
+ no switchport
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.193.5 255.255.255.252
+ ip ospf network point-to-point
+!
+interface GigabitEthernet2/2/3
+ description mss-mgw-sigtran-ce-1-rel4-gig0/1/1
+ no switchport
+ ip vrf forwarding sigtran
+ ip address 10.200.193.17 255.255.255.252
+ ip ospf network point-to-point
+!
+interface GigabitEthernet2/2/4
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/5
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/6
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/7
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/8
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/9
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/10
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/11
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/12
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/13
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/14
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/15
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/16
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/17
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/18
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/19
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/20
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/21
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/22
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/23
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/2/24
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/1
+ description Expandium Sigtran Monitoring
+ switchport
+ switchport capture
+ switchport capture allowed vlan 4089
+!
+interface GigabitEthernet2/3/2
+ description Frequentis-SW-Gi1/0/24_Po22
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 521-523,3221
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 21 mode active
+!
+interface GigabitEthernet2/3/3
+ description IN-SW1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 500-509,542,552,561,571
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+ channel-group 31 mode on
+!
+interface GigabitEthernet2/3/4
+ description IN-SW2
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 500-509,542,552,561,571
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+ channel-group 32 mode on
+!
+interface GigabitEthernet2/3/5
+ description OPM_KLIENT_ACCESS_TEMP
+ switchport
+ switchport access vlan 241
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet2/3/6
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/7
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/8
+ description FlexiBSC-OaM-2
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 3539
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet2/3/9
+ description FlexiBSC-Gb-2
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 3537
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+!
+interface GigabitEthernet2/3/10
+ description ** NT-HLR SW2 **
+ switchport
+ switchport access vlan 2004
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 510-570
+ switchport mode trunk
+ switchport nonegotiate
+!
+interface GigabitEthernet2/3/11
+ description dora-fw-indre-01-c
+ switchport
+ switchport access vlan 3751
+ switchport mode access
+!
+interface GigabitEthernet2/3/12
+ description dora-fw-ytre-01-c
+ switchport
+ switchport access vlan 3751
+ switchport mode access
+!
+interface GigabitEthernet2/3/13
+ description ** NetAct SW1 **
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 205-208,221,222,275,525-528,533,600-610,3511
+ switchport trunk allowed vlan add 3512,3533,3534
+ switchport mode trunk
+ switchport nonegotiate
+ speed 1000
+ duplex full
+ channel-group 11 mode on
+!
+interface GigabitEthernet2/3/14
+ description ** NetAct SW2 **
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 205-208,221,222,275,525-528,533,600-610,3511
+ switchport trunk allowed vlan add 3512,3533,3534
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 12 mode on
+!
+interface GigabitEthernet2/3/15
+ switchport
+ shutdown
+!
+interface GigabitEthernet2/3/16
+ description dora-mag-ssl-01
+ switchport
+ switchport private-vlan mapping 3350 3800
+ switchport mode private-vlan promiscuous
+ spanning-tree portfast edge
+!
+interface GigabitEthernet2/3/17
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/18
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/19
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/20
+ description WingCon-Po34
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 3590,3591
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 34 mode passive
+!
+interface GigabitEthernet2/3/21
+ description WinCon-Po33
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 3590,3591
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 33 mode passive
+!
+interface GigabitEthernet2/3/22
+ description Frequentis-SW-Gi2/0/24_Po22
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 521-523,3221
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 21 mode active
+!
+interface GigabitEthernet2/3/23
+ description IN-SW1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 500-509,542,552,561,571
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+ channel-group 31 mode on
+!
+interface GigabitEthernet2/3/24
+ description Dora-Datacenter-Wireless
+ switchport
+ switchport access vlan 3399
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet2/3/25
+ description IN-SW2
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 500-509,542,552,561,571
+ switchport mode trunk
+ switchport nonegotiate
+ spanning-tree guard root
+ channel-group 32 mode on
+!
+interface GigabitEthernet2/3/26
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/27
+ description dora-mag-uac-01
+ switchport
+ switchport access vlan 3704
+ spanning-tree portfast edge
+!
+interface GigabitEthernet2/3/28
+ switchport
+ switchport access vlan 241
+ switchport mode access
+ spanning-tree portfast edge
+!
+interface GigabitEthernet2/3/29
+ description dora-fcsw-3 FABRIC A
+ switchport
+ switchport access vlan 3752
+ switchport mode access
+ spanning-tree portfast edge
+!
+interface GigabitEthernet2/3/30
+ description dora-fcsw-4 FABRIC B
+ switchport
+ switchport access vlan 3752
+ switchport mode access
+ spanning-tree portfast edge
+!
+interface GigabitEthernet2/3/31
+ description dor-dd-02-backup
+ switchport
+ switchport access vlan 3703
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet2/3/32
+ description dor-dd-02-mgmt
+ switchport
+ switchport access vlan 3752
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet2/3/33
+ description dor-vplex-01-mgmt
+ switchport
+ switchport access vlan 3752
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet2/3/34
+ description dor-vnx-01-mgmt
+ switchport
+ switchport access vlan 3752
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet2/3/35
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/36
+ description Expandium-QATS-Dora-SW1
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 200,580,581,4089
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 71 mode desirable
+!
+interface GigabitEthernet2/3/37
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/38
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/39
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/40
+ description SGSN_GGSN_DORA_R2_UPLINK
+ no switchport
+ no ip address
+!
+interface GigabitEthernet2/3/40.1557
+ description ***gprs Gr from ATCA***
+ encapsulation dot1Q 1557
+ ip vrf forwarding sigtran
+ ip address 10.200.192.97 255.255.255.248
+ ip ospf network point-to-point
+!
+interface GigabitEthernet2/3/40.1652
+ encapsulation dot1Q 1652
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.192.65 255.255.255.248
+ ip ospf network point-to-point
+!
+interface GigabitEthernet2/3/40.1656
+ encapsulation dot1Q 1656
+ ip vrf forwarding gprs-gn
+ ip address 10.200.192.73 255.255.255.248
+ ip ospf network point-to-point
+!
+interface GigabitEthernet2/3/40.1660
+ encapsulation dot1Q 1660
+ ip vrf forwarding gprs-gi
+ ip address 10.200.192.81 255.255.255.248
+ ip ospf network point-to-point
+!
+interface GigabitEthernet2/3/40.1664
+ encapsulation dot1Q 1664
+ ip vrf forwarding gprs-gb
+ ip address 10.200.192.89 255.255.255.248
+ ip ospf network point-to-point
+!
+interface GigabitEthernet2/3/41
+ description SGSN_GGSN_DORA_R2_UPLINK
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/42
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/43
+ switchport
+ switchport mode access
+ shutdown
+!
+interface GigabitEthernet2/3/44
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/45
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/46
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/47
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/3/48
+ description dora-fw-ytre-01 ge-0/3
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-1099,2000-4094
+ switchport mode trunk
+ channel-protocol lacp
+ channel-group 6 mode active
+!
+interface GigabitEthernet2/4/1
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/2
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/3
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/4
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/5
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/6
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/7
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/8
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/9
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/10
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/11
+ no switchport
+ no ip address
+!
+interface GigabitEthernet2/4/12
+ no switchport
+ no ip address
+!
+interface GigabitEthernet2/4/13
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/14
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/15
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/16
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/17
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/18
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/19
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/20
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/21
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/22
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/23
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/24
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/25
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/26
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/27
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/28
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/29
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/30
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/31
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/32
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/33
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/34
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/35
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/36
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/37
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/38
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/39
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/40
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/41
+ description dor-dd-02-backup
+ switchport
+ switchport access vlan 3703
+ switchport mode access
+ shutdown
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet2/4/42
+ description dor-dd-02-mgmt
+ switchport
+ switchport access vlan 3752
+ switchport mode access
+ shutdown
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet2/4/43
+ description dor-vplex-01-mgmt
+ switchport
+ switchport access vlan 3752
+ switchport mode access
+ shutdown
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet2/4/44
+ description dor-vnx-01-mgmt
+ switchport
+ switchport access vlan 3752
+ switchport mode access
+ shutdown
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet2/4/45
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/46
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/47
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/4/48
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/5/1
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/5/2
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/5/3
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet2/5/4
+ description marbg-cat65-vss-Te2/5/4_Po20
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-99,101-110,112-210,212-313,315-499,525-528
+ switchport trunk allowed vlan add 600-610,900-1099,1212,2000-4094
+ switchport mode trunk
+ mtu 9216
+ channel-group 20 mode on
+!
+interface TenGigabitEthernet2/5/5
+ description VSS-Link1
+ no switchport
+ no ip address
+ mls qos trust cos
+ channel-group 102 mode on
+!
+interface GigabitEthernet2/6/1
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/6/2
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet2/6/3
+ no switchport
+ no ip address
+ shutdown
+!
+interface TenGigabitEthernet2/6/4
+ description marbg-cat65vss-Te1/5/4_Po20
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-99,101-110,112-210,212-313,315-499,525-528
+ switchport trunk allowed vlan add 600-610,900-1099,1212,2000-4094
+ switchport mode trunk
+ mtu 9216
+ channel-group 20 mode on
+!
+interface TenGigabitEthernet2/6/5
+ description VSS-Link2
+ no switchport
+ no ip address
+ mls qos trust cos
+ channel-group 102 mode on
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan111
+ description SAM-DB-sync
+ ip address 10.250.108.241 255.255.255.240
+!
+interface Vlan199
+ ip vrf forwarding DCN
+ ip address 174.16.1.2 255.255.255.224
+!
+interface Vlan211
+ description * Management Dora *
+ ip address 10.100.108.254 255.255.255.0
+!
+interface Vlan252
+ description ** lan.conkom.marienborg **
+ ip vrf forwarding conkom
+ ip address 10.255.255.12 255.255.255.240
+ vrrp 252 ip 10.255.255.14
+!
+interface Vlan314
+ description Adgang-Dora
+ ip vrf forwarding adgang
+ ip address 10.62.108.2 255.255.254.0
+ vrrp 62 ip 10.62.108.1
+ vrrp 62 priority 200
+!
+interface Vlan364
+ ip address 192.168.130.55 255.255.255.0
+!
+interface Vlan500
+ description IN-oam
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.144.2 255.255.255.192
+ vrrp 50 ip 10.200.144.1
+ vrrp 50 priority 200
+!
+interface Vlan501
+ description IN-data_p+r
+ ip vrf forwarding gsmr-data
+ ip address 10.200.144.66 255.255.255.224
+ vrrp 50 ip 10.200.144.65
+ vrrp 50 priority 200
+!
+interface Vlan502
+ description IN-backup
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.144.98 255.255.255.224
+ vrrp 50 ip 10.200.144.97
+ vrrp 50 priority 200
+!
+interface Vlan503
+ description IN-payload
+ ip vrf forwarding gsmr-data
+ ip address 10.200.144.130 255.255.255.240
+ vrrp 50 ip 10.200.144.129
+ vrrp 50 priority 200
+!
+interface Vlan504
+ description IN-data_online
+ ip vrf forwarding gsmr-data
+ ip address 10.200.145.2 255.255.255.224
+ vrrp 50 ip 10.200.145.1
+ vrrp 50 priority 200
+!
+interface Vlan506
+ description IN_farm-ic__ping-host
+ ip vrf forwarding gsmr-data
+ ip address 10.200.145.49 255.255.255.240
+!
+interface Vlan507
+ description IN_db-ic__ping-host
+ ip vrf forwarding gsmr-data
+ ip address 10.200.145.65 255.255.255.240
+!
+interface Vlan510
+ description ** HLR Application **
+ ip vrf forwarding gsmr-data
+ ip address 10.200.136.2 255.255.255.224
+ shutdown
+ vrrp 51 ip 10.200.136.1
+ vrrp 51 priority 200
+!
+interface Vlan519
+ description ** HLR-Admin-L3-interface **
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.140.1 255.255.255.240
+ shutdown
+!
+interface Vlan520
+ description ** HLR OAM **
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.137.2 255.255.255.192
+ shutdown
+ vrrp 52 ip 10.200.137.1
+!
+interface Vlan521
+ description Freq-OAM
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.150.1 255.255.255.192
+!
+interface Vlan522
+ description Freq-App
+ ip vrf forwarding gsmr-data
+ ip address 10.200.151.1 255.255.255.192
+!
+interface Vlan530
+ description ** One-NDS **
+ ip vrf forwarding gsmr-data
+ ip address 10.200.138.2 255.255.255.240
+ shutdown
+ vrrp 53 ip 10.200.138.1
+!
+interface Vlan531
+ description TNMS-Core_OAM
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.142.2 255.255.255.192
+ vrrp 53 ip 10.200.142.1
+ vrrp 53 priority 200
+!
+interface Vlan533
+ ip vrf forwarding DCN
+ ip address 10.200.143.1 255.255.255.192
+!
+interface Vlan542
+ description IN-SIGTRAN1
+ ip vrf forwarding sigtran
+ ip address 10.200.132.50 255.255.255.240
+ vrrp 54 ip 10.200.132.49
+ vrrp 54 priority 200
+!
+interface Vlan552
+ description IN-SIGTRAN2
+ ip vrf forwarding sigtran
+ ip address 10.200.133.50 255.255.255.240
+ vrrp 54 ip 10.200.133.49
+ vrrp 54 priority 200
+!
+interface Vlan570
+ description ** Diameter B NT-HLR **
+ ip vrf forwarding sigtran
+ ip address 10.200.133.18 255.255.255.240
+ vrrp 57 ip 10.200.133.17
+!
+interface Vlan580
+ description Expandium-OaM-ILO-DRAC
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.148.1 255.255.255.0
+!
+interface Vlan581
+ description Expandium-DATA
+ ip vrf forwarding gsmr-data
+ ip address 10.200.149.1 255.255.255.192
+!
+interface Vlan600
+ description ** OSS DATA **
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.100.2 255.255.255.0
+ vrrp 60 ip 10.200.100.1
+ vrrp 60 priority 150
+!
+interface Vlan610
+ description ** OSS MGMT **
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.102.2 255.255.255.0
+ ip helper-address 10.200.100.250
+ vrrp 61 ip 10.200.102.1
+ vrrp 61 priority 150
+!
+interface Vlan640
+ ip vrf forwarding gsmr-voice
+ ip address 10.200.170.1 255.255.255.240
+!
+interface Vlan1108
+ ip vrf forwarding ngn-internett
+ ip address 10.250.108.162 255.255.255.252
+!
+interface Vlan1176
+ ip vrf forwarding be-mikrotik
+ ip address 10.250.108.157 255.255.255.252
+!
+interface Vlan1190
+ ip vrf forwarding conkom
+ ip address 10.250.108.138 255.255.255.252
+!
+interface Vlan1202
+ description linknett.gsmr-radio.ngn
+ ip vrf forwarding gsmr-radio
+ ip address 10.250.108.66 255.255.255.248
+!
+interface Vlan1203
+ description linknett.gprs-gb.ngn
+ ip vrf forwarding gprs-gb
+ ip address 10.250.108.74 255.255.255.252
+ ip ospf network point-to-point
+!
+interface Vlan1211
+ description linknett.ngn.managment
+ ip address 10.250.108.130 255.255.255.252
+!
+interface Vlan1214
+ description linknett.pia.ngn
+ ip vrf forwarding pia
+ ip address 10.250.108.42 255.255.255.252
+ ip ospf network point-to-point
+!
+interface Vlan1219
+ description linknett.ngn-ds.kari
+ ip vrf forwarding kari
+ ip address 10.251.252.154 255.255.255.248
+!
+interface Vlan1220
+ ip vrf forwarding sporvekselvarme
+ ip address 10.250.108.137 255.255.255.252
+ ip ospf network point-to-point
+!
+interface Vlan1221
+ description linknett.frq-voip.ngn
+ ip vrf forwarding frequentis
+ ip address 10.200.192.1 255.255.255.248
+!
+interface Vlan1234
+ ip vrf forwarding sro
+ ip address 10.250.108.174 255.255.255.252
+!
+interface Vlan1242
+ ip vrf forwarding ertms
+ ip address 10.250.108.133 255.255.255.252
+ ip ospf network point-to-point
+!
+interface Vlan1306
+ ip vrf forwarding fido
+ ip address 10.250.108.106 255.255.255.248
+!
+interface Vlan1308
+ ip vrf forwarding tsov
+ ip address 10.250.108.166 255.255.255.252
+!
+interface Vlan1324
+ ip vrf forwarding ebicos-remote
+ ip address 10.250.108.170 255.255.255.252
+!
+interface Vlan1415
+ vrf forwarding rad-mgm
+ ip address 10.250.108.70 255.255.255.252
+ ip ospf network point-to-point
+!
+interface Vlan1500
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.192.17 255.255.255.248
+ ip ospf network point-to-point
+!
+interface Vlan1501
+ ip vrf forwarding gsmr-data
+ ip address 10.200.192.9 255.255.255.248
+!
+interface Vlan1540
+ description uplink_sigtran_NGN
+ ip vrf forwarding sigtran
+ ip address 10.200.65.62 255.255.255.252
+!
+interface Vlan1541
+ ip vrf forwarding sigtran
+ ip address 10.200.4.34 255.255.255.240
+ shutdown
+ vrrp 54 ip 10.200.4.33
+!
+interface Vlan2001
+ description linknet.fw.indre
+ ip vrf forwarding conkom
+ ip address 10.251.252.36 255.255.255.248
+ vrrp 100 ip 10.251.252.34
+!
+interface Vlan2002
+ description linknet.fw.ytre
+ ip vrf forwarding conkom
+ ip address 10.251.252.44 255.255.255.248
+ vrrp 100 ip 10.251.252.42
+!
+interface Vlan2108
+ ip vrf forwarding ngn-internett
+ ip address 10.251.252.107 255.255.255.248
+ vrrp 8 ip 10.251.252.105
+!
+interface Vlan2176
+ description linknet.be-mikrotik.fw
+ ip vrf forwarding be-mikrotik
+ ip address 10.251.252.132 255.255.255.248
+ vrrp 176 ip 10.251.252.130
+!
+interface Vlan2202
+ description linknett.gsmr-radio.fw
+ ip vrf forwarding gsmr-radio
+ ip address 10.251.252.19 255.255.255.248
+ vrrp 202 ip 10.251.252.17
+!
+interface Vlan2211
+ description linknett.management.fw
+ ip address 10.251.252.3 255.255.255.248
+ vrrp 211 ip 10.251.252.1
+!
+interface Vlan2213
+ no ip address
+ shutdown
+!
+interface Vlan2214
+ description linknett.pia.fw
+ ip vrf forwarding pia
+ ip address 10.251.252.115 255.255.255.248
+ vrrp 214 ip 10.251.252.113
+!
+interface Vlan2219
+ ip vrf forwarding kari
+ ip address 10.251.252.163 255.255.255.248
+ vrrp 1 ip 10.251.252.161
+!
+interface Vlan2220
+ description ** linknett.sporvekselvarme.fw **
+ ip vrf forwarding sporvekselvarme
+ ip address 10.250.106.27 255.255.255.248
+ vrrp 220 ip 10.250.106.30
+ vrrp 220 priority 120
+!
+interface Vlan2234
+ ip vrf forwarding sro
+ ip address 10.251.252.219 255.255.255.248
+ vrrp 1 ip 10.251.252.217
+!
+interface Vlan2242
+ ip vrf forwarding ertms
+ ip address 10.251.252.11 255.255.255.248
+ vrrp 242 ip 10.251.252.9
+!
+interface Vlan2306
+ ip vrf forwarding fido
+ ip address 10.251.252.59 255.255.255.248
+ vrrp 1 ip 10.251.252.57
+!
+interface Vlan2308
+ ip vrf forwarding tsov
+ ip address 10.251.252.195 255.255.255.248
+ vrrp 1 ip 10.251.252.193
+!
+interface Vlan2324
+ ip vrf forwarding ebicos-remote
+ ip address 10.251.252.203 255.255.255.248
+ vrrp 1 ip 10.251.252.201
+!
+interface Vlan2415
+ vrf forwarding rad-mgm
+ ip address 10.251.252.123 255.255.255.248
+ vrrp 24 ip 10.251.252.121
+!
+interface Vlan2500
+ description linknett.gsmr-oam.fw
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.250.3 255.255.255.248
+ vrrp 250 ip 10.200.250.1
+!
+interface Vlan2501
+ description linknett.gsmr-data.fw
+ ip vrf forwarding gsmr-data
+ ip address 10.200.250.11 255.255.255.248
+ vrrp 250 ip 10.200.250.9
+!
+interface Vlan2659
+ description linknett.gprs-gi.fw
+ ip vrf forwarding gprs-gi
+ ip address 10.200.250.35 255.255.255.248
+ vrrp 59 ip 10.200.250.33
+!
+interface Vlan3176
+ ip vrf forwarding be-mikrotik
+ ip address 10.0.176.3 255.255.255.0
+ vrrp 176 ip 10.0.176.1
+!
+interface Vlan3190
+ description linknett.conkom.lan
+ ip vrf forwarding conkom
+ ip address 10.250.255.137 255.255.255.248
+!
+interface Vlan3202
+ description ds.gsmr-radio
+ ip vrf forwarding gsmr-radio
+ ip address 10.0.202.3 255.255.255.0
+ vrrp 202 ip 10.0.202.1
+!
+interface Vlan3221
+ description Freq-VoIP-Dicora
+ ip vrf forwarding frequentis
+ ip address 10.0.18.3 255.255.255.0
+ vrrp 221 ip 10.0.18.1
+!
+interface Vlan3314
+ description linknett.marbg-dora.adgang
+ ip vrf forwarding adgang
+ ip address 10.62.250.2 255.255.255.252
+!
+interface Vlan3500
+ description linknett.gsmr-data.lan
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.255.2 255.255.255.248
+!
+interface Vlan3501
+ description linknett.gsmr-data.lan
+ ip vrf forwarding gsmr-data
+ ip address 10.200.255.10 255.255.255.248
+!
+interface Vlan3511
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.108.3 255.255.255.192
+ vrrp 35 ip 10.200.108.1
+!
+interface Vlan3512
+ description SAT-OTA_Data
+ ip vrf forwarding gsmr-data
+ ip address 10.200.109.3 255.255.255.192
+ vrrp 35 ip 10.200.109.1
+!
+interface Vlan3514
+ ip vrf forwarding gsmr-data
+ ip address 10.200.113.3 255.255.255.224
+ vrrp 35 ip 10.200.113.1
+!
+interface Vlan3533
+ description NetViewer_OAM
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.106.3 255.255.255.192
+ ip pim dense-mode
+ vrrp 153 ip 10.200.106.1
+!
+interface Vlan3540
+ description linknett.sigtran.lan
+ ip vrf forwarding sigtran
+ ip address 10.200.255.1 255.255.255.252
+!
+interface Vlan3541
+ description ***smsC sigtran 1 ***
+ ip vrf forwarding sigtran
+ ip address 10.200.118.3 255.255.255.240
+ vrrp 58 ip 10.200.118.1
+!
+interface Vlan3551
+ description ***smsC sigtran 2 ***
+ ip vrf forwarding sigtran
+ ip address 10.200.119.3 255.255.255.240
+ vrrp 59 ip 10.200.119.1
+!
+interface Vlan3580
+ description EXP-v3-OAM
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.114.3 255.255.255.0
+ vrrp 200 ip 10.200.114.1
+ vrrp 200 priority 200
+!
+interface Vlan3581
+ description EXP-v3-DATA
+ ip vrf forwarding gsmr-data
+ ip address 10.200.115.3 255.255.255.0
+ vrrp 200 ip 10.200.115.1
+ vrrp 200 priority 200
+!
+interface Vlan3590
+ description WingCon-VR_OAM
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.110.3 255.255.255.192
+ vrrp 35 ip 10.200.110.1
+!
+interface Vlan3591
+ description WingCon-VR_Data
+ ip vrf forwarding gsmr-data
+ ip address 10.200.111.3 255.255.255.192
+ vrrp 35 ip 10.200.111.1
+!
+interface Vlan3600
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.121.3 255.255.255.0
+ vrrp 63 ip 10.200.121.1
+ vrrp 63 preempt delay minimum 300
+ vrrp 63 priority 200
+!
+interface Vlan3640
+ description linknett.gsmr.voice
+ ip vrf forwarding gsmr-voice
+ ip address 10.200.255.42 255.255.255.248
+!
+interface Vlan3655
+ description linknett.gprs-gn.lan-ifw
+ ip vrf forwarding gprs-gn
+ ip address 10.200.255.26 255.255.255.248
+ vrrp 36 ip 10.200.255.27
+!
+interface Vlan3656
+ description GPRS-GN-DNS
+ ip vrf forwarding gprs-gn
+ ip address 185.27.24.163 255.255.255.248
+ vrrp 56 ip 185.27.24.161
+!
+interface Vlan3657
+ description GPRS-GN-DNS-OaM
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.116.3 255.255.255.192
+ vrrp 36 ip 10.200.116.1
+!
+interface Vlan3659
+ description linknett.gprs-gi.lan
+ ip vrf forwarding gprs-gi
+ ip address 10.200.255.34 255.255.255.248
+!
+interface Vlan3663
+ description linknett.gprs-gb.lan
+ ip vrf forwarding gprs-gb
+ ip address 10.200.255.50 255.255.255.248
+!
+interface Vlan3751
+ ip vrf forwarding mgmt-dc-network
+ ip address 10.206.201.101 255.255.255.0
+!
+interface Vlan3758
+ description VMware-vSAN
+ no ip address
+ no ip igmp snooping
+ shutdown
+!
+interface Vlan4089
+ no ip address
+ shutdown
+!
+interface Vlan4090
+ no ip address
+ shutdown
+!
+router ospf 500 vrf gsmr-oam
+ router-id 10.200.255.2
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ redistribute connected subnets
+ network 10.200.192.17 0.0.0.0 area 0
+ network 10.200.192.25 0.0.0.0 area 0
+ network 10.200.192.65 0.0.0.0 area 0
+ network 10.200.193.1 0.0.0.0 area 0
+ network 10.200.193.5 0.0.0.0 area 0
+ network 10.200.255.0 0.0.0.7 area 0
+!
+router ospf 501 vrf gsmr-data
+ router-id 10.200.255.10
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ redistribute connected subnets
+ network 10.200.192.9 0.0.0.0 area 0
+ network 10.200.255.8 0.0.0.7 area 0
+ default-information originate
+!
+router ospf 202 vrf gsmr-radio
+ router-id 10.250.108.66
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ redistribute connected subnets
+ network 10.0.202.0 0.0.0.255 area 0
+ network 10.250.108.66 0.0.0.0 area 0
+ default-information originate metric 1000
+!
+router ospf 221 vrf frequentis
+ router-id 10.200.64.2
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ network 10.0.18.3 0.0.0.0 area 0
+ network 10.200.192.1 0.0.0.0 area 0
+ default-information originate always metric 1000
+!
+router ospf 242 vrf ertms
+ router-id 10.250.108.10
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ network 10.250.108.133 0.0.0.0 area 0
+ network 10.251.252.11 0.0.0.0 area 0
+ default-information originate metric 1000
+!
+router ospf 533 vrf DCN
+ router-id 174.16.1.2
+ log-adjacency-changes
+ nsf
+ redistribute connected subnets
+ network 174.16.1.0 0.0.0.31 area 0
+ default-information originate always metric 200
+!
+router ospf 314 vrf adgang
+ router-id 10.62.250.2
+ log-adjacency-changes
+ nsf
+ redistribute connected subnets
+ network 10.62.250.2 0.0.0.0 area 0
+!
+router ospf 3211
+ router-id 10.0.211.21
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ redistribute connected subnets route-map export.ospf.ngn
+ redistribute static metric 1001 subnets route-map export.ospf.ngn
+ redistribute ospf 211 metric 500 metric-type 1 subnets
+ network 10.250.108.130 0.0.0.0 area 0
+!
+router ospf 190 vrf conkom
+ router-id 10.251.252.36
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ redistribute connected subnets
+ redistribute bgp 64730 subnets
+ network 10.251.252.36 0.0.0.0 area 0
+ network 10.251.252.44 0.0.0.0 area 0
+!
+router ospf 306 vrf fido
+ router-id 10.250.108.106
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ network 10.250.108.106 0.0.0.0 area 0
+ network 10.251.252.59 0.0.0.0 area 0
+ default-information originate always metric 1000
+!
+router ospf 540 vrf sigtran
+ router-id 10.200.192.81
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ redistribute connected subnets
+ network 10.200.65.62 0.0.0.0 area 0
+ network 10.200.192.57 0.0.0.0 area 0
+ network 10.200.192.80 0.0.0.7 area 0
+ network 10.200.192.97 0.0.0.0 area 0
+ network 10.200.193.13 0.0.0.0 area 0
+ network 10.200.193.17 0.0.0.0 area 0
+ network 10.200.255.0 0.0.0.3 area 0
+!
+router ospf 640 vrf gsmr-voice
+ router-id 10.200.170.1
+ log-adjacency-changes
+ nsf
+ network 10.200.170.0 0.0.0.15 area 0
+ network 10.200.255.40 0.0.0.7 area 0
+!
+router ospf 659 vrf gprs-gi
+ router-id 10.200.192.41
+ log-adjacency-changes
+ nsf
+ redistribute connected subnets
+ network 10.200.192.41 0.0.0.0 area 0
+ network 10.200.192.81 0.0.0.0 area 0
+ network 10.200.255.34 0.0.0.0 area 0
+ default-information originate
+!
+router ospf 655 vrf gprs-gn
+ router-id 10.200.192.33
+ log-adjacency-changes
+ nsf
+ redistribute connected subnets
+ redistribute static metric 1000 subnets
+ network 10.200.192.33 0.0.0.0 area 0
+ network 10.200.192.73 0.0.0.0 area 0
+ network 10.200.255.26 0.0.0.0 area 0
+ default-information originate metric 1000
+!
+router ospf 1663 vrf gprs-gb
+ router-id 10.200.192.49
+ log-adjacency-changes
+ nsf
+ redistribute connected subnets
+ network 10.200.192.49 0.0.0.0 area 0
+ network 10.200.192.89 0.0.0.0 area 0
+ network 10.200.255.50 0.0.0.0 area 0
+ network 10.250.108.74 0.0.0.0 area 0
+ default-information originate
+!
+router ospf 176 vrf be-mikrotik
+ router-id 10.250.108.157
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ network 10.0.176.3 0.0.0.0 area 0
+ network 10.250.108.157 0.0.0.0 area 0
+ default-information originate always metric 1000
+!
+router ospf 220 vrf sporvekselvarme
+ router-id 10.250.108.137
+ log-adjacency-changes
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ redistribute static metric 1000 subnets
+ network 10.250.106.27 0.0.0.0 area 0
+ network 10.250.108.137 0.0.0.0 area 0
+!
+router ospf 8 vrf ngn-internett
+ router-id 10.250.108.162
+ log-adjacency-changes
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ network 10.250.108.162 0.0.0.0 area 0
+ network 10.251.252.107 0.0.0.0 area 0
+ default-information originate always metric 1000
+!
+router ospf 214 vrf pia
+ router-id 10.250.108.42
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ redistribute static metric 1000 subnets
+ network 10.250.108.42 0.0.0.0 area 0
+ network 10.251.252.115 0.0.0.0 area 0
+!
+router ospf 415 vrf rad-mgm
+ router-id 10.250.108.70
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ network 10.250.108.70 0.0.0.0 area 0
+ network 10.251.252.123 0.0.0.0 area 0
+ default-information originate metric 1000
+!
+router ospf 219 vrf kari
+ router-id 10.250.108.254
+ log-adjacency-changes
+ auto-cost reference-bandwidth 100000
+ nsf
+ capability vrf-lite
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ redistribute static subnets
+ network 10.251.252.152 0.0.0.7 area 0
+ network 10.251.252.160 0.0.0.7 area 0
+ default-information originate
+!
+router ospf 308 vrf tsov
+ router-id 10.250.108.166
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ network 10.250.108.166 0.0.0.0 area 0
+ network 10.251.252.195 0.0.0.0 area 0
+ default-information originate always metric 1000
+!
+router ospf 324 vrf ebicos-remote
+ router-id 10.250.108.170
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ network 10.250.108.170 0.0.0.0 area 0
+ network 10.251.252.203 0.0.0.0 area 0
+ default-information originate always
+!
+router ospf 234 vrf sro
+ router-id 10.250.108.174
+ log-adjacency-changes
+ network 10.250.108.174 0.0.0.0 area 0
+ network 10.251.252.219 0.0.0.0 area 0
+ default-information originate always
+!
+router ospf 211
+ router-id 10.100.108.254
+ log-adjacency-changes
+ nsf
+ timers throttle spf 10 1000 10000
+ timers throttle lsa all 0 1000 10000
+ redistribute ospf 3211 subnets route-map REDIST_MANAGEMENT_MBG
+ passive-interface Vlan111
+ passive-interface Vlan211
+ network 10.100.108.254 0.0.0.0 area 0
+ network 10.250.108.241 0.0.0.0 area 0
+ network 10.251.252.3 0.0.0.0 area 0
+ default-information originate metric 1001
+ distance ospf intra-area 100 inter-area 105 
+!
+router bgp 64730
+ no synchronization
+ bgp log-neighbor-changes
+ bgp graceful-restart restart-time 120
+ bgp graceful-restart stalepath-time 360
+ bgp graceful-restart
+ no auto-summary
+ !
+ address-family ipv4 vrf conkom
+  redistribute ospf 190 vrf conkom match internal external 1 external 2
+  neighbor 10.250.108.137 remote-as 64730
+  neighbor 10.250.108.137 fall-over
+  neighbor 10.250.108.137 activate
+  neighbor 10.250.108.137 next-hop-self
+  neighbor 10.250.255.138 remote-as 64730
+  neighbor 10.250.255.138 fall-over
+  neighbor 10.250.255.138 activate
+  neighbor 10.250.255.138 route-reflector-client
+  neighbor 10.250.255.138 next-hop-self
+  no synchronization
+  bgp redistribute-internal
+  bgp router-id 10.250.255.137
+ exit-address-family
+!
+ip classless
+ip forward-protocol nd
+ip route 10.87.15.31 255.255.255.255 10.251.252.6
+ip route 10.87.15.32 255.255.255.255 10.251.252.6
+ip route 10.110.0.0 255.255.0.0 10.251.252.6
+ip route 10.206.0.0 255.254.0.0 10.251.252.6
+ip route 10.208.112.0 255.255.255.0 10.251.252.6
+ip route 10.255.0.0 255.255.0.0 10.251.252.6
+ip route vrf ertms 0.0.0.0 0.0.0.0 10.251.252.14
+ip route vrf gsmr-data 0.0.0.0 0.0.0.0 10.200.250.14
+ip route vrf gsmr-oam 0.0.0.0 0.0.0.0 10.200.250.6
+ip route vrf gsmr-radio 0.0.0.0 0.0.0.0 10.251.252.22
+ip route vrf sporvekselvarme 10.0.220.0 255.255.255.0 10.250.106.25
+ip route vrf sporvekselvarme 10.86.0.0 255.254.0.0 10.250.106.25
+ip route vrf sporvekselvarme 10.206.0.0 255.254.0.0 10.250.106.25
+ip route vrf fido 0.0.0.0 0.0.0.0 10.251.252.62
+ip route vrf gprs-gi 0.0.0.0 0.0.0.0 10.200.250.38
+ip route vrf gprs-gn 0.0.0.0 0.0.0.0 10.200.255.30
+ip route vrf be-mikrotik 0.0.0.0 0.0.0.0 10.251.252.134
+ip route vrf ngn-internett 0.0.0.0 0.0.0.0 10.251.252.108
+ip route vrf pia 10.2.254.0 255.255.254.0 10.251.252.118
+ip route vrf pia 10.90.72.0 255.255.255.0 10.251.252.118
+ip route vrf kari 0.0.0.0 0.0.0.0 10.251.252.165
+ip route vrf mgmt-dc-network 0.0.0.0 0.0.0.0 10.206.201.1
+ip route vrf tsov 0.0.0.0 0.0.0.0 10.251.252.196
+ip route vrf ebicos-remote 0.0.0.0 0.0.0.0 10.251.252.204
+ip route vrf sro 0.0.0.0 0.0.0.0 10.251.252.220
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+ip prefix-list MANAGEMENT_MBG seq 5 permit 10.100.106.0/24 ge 32
+logging source-interface Vlan3751 vrf mgmt-dc-network
+logging host 10.206.201.7 vrf mgmt-dc-network
+arp vrf gsmr-oam 10.200.106.10 03bf.0ac8.6a0a ARPA
+!
+route-map REDIST_MANAGEMENT_MBG permit 10
+ match ip address prefix-list MANAGEMENT_MBG
+ set metric 1000
+!
+route-map export.ospf.ngn permit 10
+ match ip address 199
+!
+snmp-server engineID local 800000090300000000000002
+snmp-server group SNMPv3-jbv v3 priv 
+snmp-server community opmborg RO
+snmp-server community jacklondon RO 10
+snmp-server community helsfyr95 RW 10
+snmp-server ifindex persist
+snmp-server trap-source Vlan211
+snmp-server source-interface informs Vlan211
+snmp-server enable traps snmp authentication linkdown linkup coldstart warmstart
+snmp-server enable traps config
+snmp-server enable traps syslog
+snmp-server enable traps entity
+snmp-server enable traps envmon fan shutdown supply temperature
+snmp-server host 10.100.108.230 version 3 priv SNMPv3-jbv 
+snmp-server host 10.250.106.230 version 3 priv SNMPv3-jbv 
+snmp-server host 10.255.0.50 opmborg 
+snmp ifmib ifindex persist
+tacacs-server directed-request
+tacacs server ACS1
+ address ipv4 172.28.7.202
+ key 7 070D205E4B5D2C57
+ timeout 1
+tacacs server ACS2
+ address ipv4 172.28.7.203
+ key 7 15100A1E017E1E76
+ timeout 1
+!
+radius-server host 10.206.106.42 auth-port 1812 acct-port 1813 key 7 06071D2479191B1C
+!
+control-plane
+!
+!
+dial-peer cor custom
+!
+!
+!
+banner login ^CCC
+******************************
+* Property of Norwegian Rail *
+* Certified access only      *
+* You are now being logged   *
+* Entering without proper    *
+* credidensials will be      *
+* investigated by the Police *
+******************************^C
+alias configure show do show
+alias exec s show ip interface brief
+alias exec sr show ip route
+alias exec si show interfaces status
+!
+line con 0
+ exec-timeout 60 0
+ privilege level 15
+ logging synchronous
+ login authentication CONSOLE
+line vty 0 4
+ access-class VTY_ACCESS in
+ exec-timeout 60 0
+ password 7 01100F175804
+ logging synchronous
+ transport input ssh
+line vty 5 15
+ access-class VTY_ACCESS in
+ password 7 121A0C041104
+ rotary 1
+ transport input telnet ssh
+!
+!
+monitor session 10 type rspan-source
+ source interface Gi1/2/3 rx
+ source interface Gi2/2/3 rx
+ destination remote vlan 4089
+!
+!
+monitor session 11 type rspan-source
+ source vlan 540 - 542 , 550 - 552 , 3541 , 3551 rx
+ destination remote vlan 4089
+!
+!
+ntp logging
+ntp source Vlan211
+ntp server 10.100.106.210
+ntp server 10.100.108.210 prefer
+mac-address-table aging-time 14880
+!
+!
+module provision switch 1
+ slot 1 slot-type 284 port-type 60 number 16  virtual-slot 17
+ slot 2 slot-type 156 port-type 31 number 24  virtual-slot 18
+ slot 3 slot-type 147 port-type 61 number 48  virtual-slot 19
+ slot 4 slot-type 147 port-type 61 number 48  virtual-slot 20
+ slot 5 slot-type 254 port-type 31 number 2 port-type 61 number 1 port-type 60 number 2  virtual-slot 21
+ slot 6 slot-type 254 port-type 31 number 2 port-type 61 number 1 port-type 60 number 2  virtual-slot 22
+ slot 7 slot-type 227 port-type 60 number 8  virtual-slot 23
+ !
+module provision switch 2
+ slot 1 slot-type 284 port-type 60 number 16  virtual-slot 33
+ slot 2 slot-type 156 port-type 31 number 24  virtual-slot 34
+ slot 3 slot-type 147 port-type 61 number 48  virtual-slot 35
+ slot 4 slot-type 147 port-type 61 number 48  virtual-slot 36
+ slot 5 slot-type 254 port-type 31 number 2 port-type 61 number 1 port-type 60 number 2  virtual-slot 37
+ slot 6 slot-type 254 port-type 31 number 2 port-type 61 number 1 port-type 60 number 2  virtual-slot 38
+ 
+!
+
+end
+
+dora-cat65-vss#
