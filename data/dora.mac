@@ -1,12 +1,3 @@
-=~=~=~=~=~=~=~=~=~=~=~= PuTTY log 2020.01.31 12:00:36 =~=~=~=~=~=~=~=~=~=~=~=
-show mac add
-dora-cat65-vss#show mac address-table 
-Legend: * - primary entry
-        age - seconds since last seen
-        n/a - not available
-
-  vlan   mac address     type    learn     age              ports
-------+----------------+--------+-----+----------+--------------------------
 *  274  984b.e172.5c5b   dynamic  Yes        600   Po20
 * 3755  0050.565a.171a   dynamic  Yes         60   Po20
 *    1  6cc2.173a.ef41   dynamic  Yes        600   Po20
@@ -1575,5 +1566,3 @@ Legend: * - primary entry
 * 3705  0050.5650.73a6   dynamic  Yes         60   Po20
 *  200  0050.56b8.0040   dynamic  Yes        600   Po20
 * 3761  0050.561a.ef40   dynamic  Yes         60   Po20
-
-dora-cat65-vss#
