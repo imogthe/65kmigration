@@ -1,0 +1,21 @@
+interface Vlan199
+ ip vrf forwarding DCN
+ ip address 174.16.1.2 255.255.255.224
+!
+interface Vlan211
+ description * Management Dora *
+ ip address 10.100.108.254 255.255.255.0
+!
+interface Vlan252
+ description ** lan.conkom.marienborg **
+ ip vrf forwarding conkom
+ ip address 10.255.255.12 255.255.255.240
+ vrrp 252 ip 10.255.255.14
+!
+interface Vlan314
+ description Adgang-Dora
+ ip vrf forwarding adgang
+ ip address 10.62.108.2 255.255.254.0
+ vrrp 62 ip 10.62.108.1
+ vrrp 62 priority 200
+!

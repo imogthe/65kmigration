@@ -1,0 +1,63 @@
+interface Port-channel1
+ description *** uplinkt til marienborg-cat65-vss ***
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 256,400,3620,3621
+ switchport mode trunk
+ mtu 9216
+!
+interface Port-channel5
+ description dora-fw_indre
+ switchport
+ switchport trunk encapsulation dot1q
+ switchport trunk allowed vlan 1-1099,1212,2000-4094
+ switchport mode trunk
+!
+interface Loopback200
+ description NTP-adresse for GSM-R
+ ip vrf forwarding gsmr-oam
+ ip address 10.200.223.255 255.255.255.255
+!
+interface TenGigabitEthernet1/1/5
+ description dora-sr-2_3/2/1
+ switchport
+ switchport trunk allowed vlan 100,1700-1999
+ switchport mode trunk
+ switchport nonegotiate
+ channel-group 120 mode active
+!
+interface TenGigabitEthernet1/1/6
+ description dora-fw-indre-01 Ge1/0
+ switchport
+ switchport trunk allowed vlan 1-1099,1212,2000-4094
+ switchport mode trunk
+ channel-group 5 mode active
+!
+
+interface GigabitEthernet1/3/1
+ description Adgang-US-tavlerom
+ switchport
+ switchport access vlan 314
+ switchport mode access
+ switchport nonegotiate
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!
+interface GigabitEthernet1/3/2
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/3
+ no switchport
+ no ip address
+ shutdown
+!
+interface GigabitEthernet1/3/4
+ description TNMS-Core_OAM
+ switchport
+ switchport access vlan 531
+ switchport mode access
+ spanning-tree portfast edge
+ spanning-tree bpduguard enable
+!

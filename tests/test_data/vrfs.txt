@@ -1,0 +1,15 @@
+ip vrf gprs-gb
+ rd 64730:1663
+ route-target export 64730:1663
+ route-target import 64730:1663
+!
+ip vrf gprs-gi
+ rd 64730:1659
+ route-target export 64730:1659
+ route-target import 64730:1659
+!
+ip vrf gprs-gn
+ rd 64730:1665
+ route-target export 64730:1665
+ route-target import 64730:1665
+!
